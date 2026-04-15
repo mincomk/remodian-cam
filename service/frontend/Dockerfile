@@ -4,10 +4,14 @@ WORKDIR /app
 ARG VITE_API_BASE
 ENV VITE_API_BASE=$VITE_API_BASE
 
-COPY package*.json ./
-RUN npm i -D
+RUN npm install -g pnpm
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf

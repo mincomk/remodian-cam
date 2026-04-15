@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: service/backend/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - CROP=${CROP}
+      - CAM_URL=${CAM_URL:-}
+      - IR_URL=${IR_URL:-}
+      - PORT=3000
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: service/frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE: ""
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

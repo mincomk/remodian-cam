@@ -1,0 +1,19 @@
+[package]
+name = "remodian-vision"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "remodian-vision"
+path = "src/main.rs"
+required-features = ["std"]
+
+[dependencies]
+image = { version = "0.25", optional = true }
+
+[features]
+default = ["std"]
+std = ["dep:image"]

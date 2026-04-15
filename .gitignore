@@ -1,0 +1,7 @@
+target
+.env
+node_modules
+dist
+.direnv
+10_symbols
+.claude

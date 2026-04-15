@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+    --color-gray-500: #111112;
+    --color-gray-400: #202020;
+    --color-gray-300: #303031;
+    --color-gray-200: #404040;
+    --color-white-500: #fdfdfd;
+    --color-brand: #7338d9;
+}
+
+.title {
+    font-weight: 700;
+    background: #f20c6c;
+    background: linear-gradient(119deg, rgba(242, 12, 108, 1) 0%, rgba(134, 83, 237, 1) 100%);
+    color: transparent;
+    background-clip: text;
+}
+
+html,
+body,
+:root,
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+:root {
+    font-size: 1.1rem;
+
+    @apply bg-gray-500;
+    @apply text-white-500;
+}

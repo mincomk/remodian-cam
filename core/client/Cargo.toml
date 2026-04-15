@@ -1,0 +1,11 @@
+[package]
+name = "remodian-client"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+mockall = "0.14.0"
+reqwest = "0.13.2"
+rumqttc = "0.25.1"
+thiserror = "2.0.18"
+tokio = { version = "1", features = ["time"] }

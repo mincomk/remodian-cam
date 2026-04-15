@@ -1,0 +1,12 @@
+[package]
+name = "remodian-vision-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.8"
+image = "0.25.10"
+remodian-vision = { version = "0.1.0", path = "../../core/vision" }
+nokhwa = { version = "0.10.10", features = ["input-native"] }
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.51.1", features = ["full"] }

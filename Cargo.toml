@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = [
+    "core/vision",
+    "core/control",
+    "core/client",
+    "dev/vision-server",
+    "dev/calibration-ui",
+    "service/backend",
+    "firmware/remodian-firmware",
+]

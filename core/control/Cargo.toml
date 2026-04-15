@@ -1,0 +1,21 @@
+[package]
+name = "remodian-control"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "remodian-control"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1.51.1", features = ["full"] }
+remodian-client = { path = "../../core/client" }
+reqwest = "0.13.2"
+eframe = "0.34.1"
+clap = { version = "4.6.0", features = ["derive"] }
+parking_lot = "0.12.5"
+image = "0.25.10"
+remodian-vision = { version = "0.1.0", path = "../../core/vision" }

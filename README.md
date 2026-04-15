@@ -38,4 +38,5 @@ But we have a helpful trait of the volume here: It changes consistently. So I us
 
 ## Conclusion
 ![remodian](/assets/remodian.png)
+
 LGTM! Let's enjoy the music.

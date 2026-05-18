@@ -6,7 +6,7 @@ use std::sync::{
 use eframe::egui;
 use parking_lot::Mutex;
 use remodian_client::MqttRemodianClient;
-use remodian_control::{AnyClient, HttpRemodianClient, VolumeState, control_loop, fetch_volume_task};
+use remodian_control::{AnyClient, UdpRemodianClient, VolumeState, control_loop, fetch_volume_task};
 
 // ── CLI ───────────────────────────────────────────────────────────────────────
 
@@ -21,10 +21,10 @@ struct Cli {
     #[clap(long)]
     cam_url: Option<String>,
 
-    /// HTTP base URL of the IR device (e.g. http://192.168.1.60).
-    /// When set, IR commands are sent via HTTP POST /ir instead of MQTT.
+    /// UDP socket address of the IR device (e.g. 192.168.1.60:5555).
+    /// When set, IR commands are sent as 4-byte UDP datagrams instead of MQTT.
     #[clap(long)]
-    ir_url: Option<String>,
+    ir_udp: Option<String>,
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -56,9 +56,12 @@ fn main() -> eframe::Result {
         is_automatic.clone(),
     ));
 
-    let remodian_client = if let Some(url) = cli.ir_url {
-        println!("IR client: HTTP → {url}");
-        AnyClient::Http(HttpRemodianClient::new(&url))
+    let remodian_client = if let Some(addr) = cli.ir_udp {
+        println!("IR client: UDP → {addr}");
+        let client = rt
+            .block_on(UdpRemodianClient::new(&addr))
+            .expect("bind UDP socket");
+        AnyClient::Udp(client)
     } else {
         println!("IR client: MQTT → 192.168.1.103:1883");
         let (mqtt_client, mut event_loop) =

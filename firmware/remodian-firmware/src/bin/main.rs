@@ -28,7 +28,7 @@ use static_cell::StaticCell;
 use esp_backtrace as _;
 use esp_println as _;
 
-use remodian_firmware::http::{http_task, ir_driver};
+use remodian_firmware::udp::{ir_driver, udp_task};
 
 // ── Configuration ────────────────────────────────────────────────────────────
 
@@ -142,9 +142,9 @@ async fn main(spawner: Spawner) -> ! {
         Timer::after(Duration::from_millis(500)).await;
     }
 
-    // ── Start HTTP server + run IR driver ─────────────────────────────────────
+    // ── Start UDP listener + run IR driver ────────────────────────────────────
 
-    spawner.must_spawn(http_task(stack, spawner));
+    spawner.must_spawn(udp_task(stack));
 
     ir_driver(&mut ir_channel).await
 }

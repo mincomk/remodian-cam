@@ -34,6 +34,8 @@ pub enum RemodianError {
     Mqtt(#[from] rumqttc::ClientError),
     #[error("HTTP client error: {0}")]
     Http(reqwest::Error),
+    #[error("UDP transport error: {0}")]
+    Udp(#[from] std::io::Error),
 }
 
 #[automock]

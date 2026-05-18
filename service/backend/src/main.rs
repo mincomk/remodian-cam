@@ -14,7 +14,7 @@ use axum::{
 use parking_lot::Mutex;
 use remodian_client::{Command, MqttRemodianClient, RemodianClient};
 use remodian_control::{
-    AnyClient, HttpRemodianClient, VolumeState, control_loop, fetch_volume_task,
+    AnyClient, UdpRemodianClient, VolumeState, control_loop, fetch_volume_task,
 };
 use serde::{Deserialize, Serialize};
 use tokio::sync::broadcast;
@@ -34,8 +34,9 @@ struct Cli {
     #[clap(long, env = "CAM_URL")]
     cam_url: Option<String>,
 
-    #[clap(long, env = "IR_URL")]
-    ir_url: Option<String>,
+    /// UDP socket address of the IR device (e.g. 192.168.1.60:5555).
+    #[clap(long, env = "IR_UDP")]
+    ir_udp: Option<String>,
 
     /// Port to listen on (default: 3000).
     /// Also configurable via PORT env var.
@@ -201,9 +202,12 @@ async fn main() {
     // SSE broadcast channel (capacity: 64 messages)
     let (sse_tx, _) = broadcast::channel::<String>(64);
 
-    let client: Arc<AnyClient> = if let Some(ref url) = cli.ir_url {
-        println!("IR client: HTTP → {url}");
-        Arc::new(AnyClient::Http(HttpRemodianClient::new(url)))
+    let client: Arc<AnyClient> = if let Some(ref addr) = cli.ir_udp {
+        println!("IR client: UDP → {addr}");
+        let udp = UdpRemodianClient::new(addr)
+            .await
+            .expect("bind UDP socket");
+        Arc::new(AnyClient::Udp(udp))
     } else {
         println!("IR client: MQTT → 192.168.1.103:1883");
         let (mqtt_client, mut event_loop) =

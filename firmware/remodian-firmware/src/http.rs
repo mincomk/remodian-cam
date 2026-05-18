@@ -24,7 +24,7 @@ use crate::rc5::send_rc5x;
 /// signal: 1 = single fire, 2 = start continuous, 3 = stop
 pub static IR_CMD: Channel<CriticalSectionRawMutex, (u8, u8, bool, u8), 1> = Channel::new();
 
-static CONNECTION_SEMAPHORE: GreedySemaphore<CriticalSectionRawMutex> = GreedySemaphore::new(4);
+static CONNECTION_SEMAPHORE: GreedySemaphore<CriticalSectionRawMutex> = GreedySemaphore::new(1);
 
 #[derive(Deserialize)]
 struct IrParams {

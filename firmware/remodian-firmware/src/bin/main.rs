@@ -22,7 +22,7 @@ use esp_hal::{
     time::Rate,
     timer::timg::TimerGroup,
 };
-use esp_radio::wifi::{ClientConfig, ModeConfig, WifiDevice};
+use esp_radio::wifi::{ClientConfig, Config as WifiConfig, ModeConfig, PowerSaveMode, WifiDevice};
 use static_cell::StaticCell;
 
 use esp_backtrace as _;
@@ -57,7 +57,7 @@ async fn net_task(mut runner: Runner<'static, WifiDevice<'static>>) -> ! {
 #[allow(clippy::large_stack_frames)]
 #[esp_rtos::main]
 async fn main(spawner: Spawner) -> ! {
-    let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
+    let config = esp_hal::Config::default().with_cpu_clock(CpuClock::_80MHz);
     let peripherals = esp_hal::init(config);
 
     esp_alloc::heap_allocator!(#[esp_hal::ram(reclaimed)] size: 98768);
@@ -70,8 +70,9 @@ async fn main(spawner: Spawner) -> ! {
     let radio_init = esp_radio::init().expect("Failed to initialize radio");
     let radio_init = RADIO_CONTROLLER.init(radio_init);
 
+    let wifi_config = WifiConfig::default().with_power_save_mode(PowerSaveMode::Minimum);
     let (mut wifi_controller, interfaces) =
-        esp_radio::wifi::new(radio_init, peripherals.WIFI, Default::default())
+        esp_radio::wifi::new(radio_init, peripherals.WIFI, wifi_config)
             .expect("Failed to initialize Wi-Fi");
 
     // ── Embassy-net stack ────────────────────────────────────────────────────

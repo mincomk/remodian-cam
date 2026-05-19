@@ -1,8 +1,7 @@
 services:
   backend:
-    build:
-      context: .
-      dockerfile: service/backend/Dockerfile
+    image: ghcr.io/mincomk/remodian-backend:${IMAGE_TAG:-latest}
+    pull_policy: always
     ports:
       - "3000:3000"
     environment:
@@ -13,11 +12,8 @@ services:
     restart: unless-stopped
 
   frontend:
-    build:
-      context: service/frontend
-      dockerfile: Dockerfile
-      args:
-        VITE_API_BASE: ""
+    image: ghcr.io/mincomk/remodian-frontend:${IMAGE_TAG:-latest}
+    pull_policy: always
     ports:
       - "8080:80"
     depends_on:

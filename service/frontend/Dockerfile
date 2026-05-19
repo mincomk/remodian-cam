@@ -4,7 +4,7 @@ WORKDIR /app
 ARG VITE_API_BASE
 ENV VITE_API_BASE=$VITE_API_BASE
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm@9
 
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
